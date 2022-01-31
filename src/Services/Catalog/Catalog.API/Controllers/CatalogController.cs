@@ -43,6 +43,7 @@ namespace Catalog.API.Controllers
 
         }
 
+        // Routes are defined if there are multiple GET operation
         [Route("[action]/{category}",Name ="GetProductByCategory")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
