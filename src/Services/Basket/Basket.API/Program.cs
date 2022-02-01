@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen(c =>
 // Add services to the container.
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = configuration.GetValue<string>("CashSettings:ConnectionString");
+    options.Configuration = configuration.GetValue<string>("CacheSettings:ConnectionString");
 });
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
