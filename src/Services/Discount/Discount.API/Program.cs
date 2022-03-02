@@ -1,5 +1,6 @@
 using Discount.API.Repositories;
 using Microsoft.OpenApi.Models;
+using Discount.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
-
+app.MigrateDatabase<Program>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
