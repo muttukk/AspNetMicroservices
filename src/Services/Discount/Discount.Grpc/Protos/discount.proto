@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "Discount.Grpc.Protos";
+
+service DiscountProtoService{
+	// google remote procedure call
+	// GetDiscountRequest-> input to the service
+	// CouponModel is return type
+	rpc GetDiscount(GetDiscountRequest) returns (CouponModel); // basci sytnax to expose basic RPC service
+	rpc CreateDiscount (CreateDiscountRequest) returns (CouponModel);
+	rpc UpdateDiscount (UpdateDiscountRequest) returns (CouponModel);
+	rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+
+}
+
+message GetDiscountRequest{
+	string productName=1;
+}
+
+message CouponModel{
+		int32 Id=1; 
+		string ProductName=2;
+		string Description=3;
+		int32 Amount=4 ;
+}
+
+message CreateDiscountRequest {
+	CouponModel coupon = 1;
+}
+
+message UpdateDiscountRequest {
+	CouponModel coupon = 1;
+}
+
+message DeleteDiscountRequest {
+	string productName = 1;
+}
+
+message DeleteDiscountResponse {
+	bool success = 1;
+}
