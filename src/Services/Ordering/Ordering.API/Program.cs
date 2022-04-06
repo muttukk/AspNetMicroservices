@@ -1,3 +1,6 @@
+using EventBus.Message.Common;
+using MassTransit;
+using Ordering.API.EventBusConsumer;
 using Ordering.API.Extensions;
 using Ordering.Application;
 using Ordering.Infrastructure;
@@ -8,11 +11,32 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//For Application layer services
+builder.Services.AddApplicationsService();
+//For Infrastructure layer services
+builder.Services.AddInfrastructureServices(configuration);
+
+// for RabbitMQ -MassTransit
+builder.Services.AddMassTransit(configMassTransit =>
+{
+    configMassTransit.AddConsumer<BasketCheckoutConsumer>();
+    configMassTransit.UsingRabbitMq((context, configRabbitMQ) =>
+    {
+        configRabbitMQ.Host(configuration["EventBusSettings:HostAddress"]);
+
+        configRabbitMQ.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, configConsumer =>
+        {
+            configConsumer.ConfigureConsumer<BasketCheckoutConsumer>(context);
+        });
+    });
+});
+
+//general Config
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<BasketCheckoutConsumer>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddApplicationsService();
-builder.Services.AddInfrastructureServices(configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
