@@ -21,13 +21,13 @@ builder.Services.AddInfrastructureServices(configuration);
 builder.Services.AddMassTransit(configMassTransit =>
 {
     configMassTransit.AddConsumer<BasketCheckoutConsumer>();
-    configMassTransit.UsingRabbitMq((context, configRabbitMQ) =>
+    configMassTransit.UsingRabbitMq((busRegistrationContext, configRabbitMQ) =>
     {
         configRabbitMQ.Host(configuration["EventBusSettings:HostAddress"]);
 
         configRabbitMQ.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, configConsumer =>
         {
-            configConsumer.ConfigureConsumer<BasketCheckoutConsumer>(context);
+            configConsumer.ConfigureConsumer<BasketCheckoutConsumer>(busRegistrationContext);
         });
     });
 });
